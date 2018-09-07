@@ -1,0 +1,22 @@
+server:
+  port: 8333
+mybatis:
+  mapperLocations: classpath*:com/dino/registermodule/dao/sql/*.xml
+  configLocation: classpath:mybatis/mybatis-config.xml
+  basePackage: com.dino.registermodule.dao
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/register
+    username: admin
+    password: root
+redis:
+  hostName: 192.168.1.40
+  port: 6379
+  usePool: true
+  password:
+  maxIdle: 200
+  maxTotal: 1000
+  blockWhenExhausted: true
+  maxWaitMillis: 30000
+  testOnBorrow: true

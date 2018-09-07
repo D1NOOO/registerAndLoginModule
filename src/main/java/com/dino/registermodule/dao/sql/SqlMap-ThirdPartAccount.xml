@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dino.registermodule.dao.ThirdPartAccountDao">
+    <insert id="insert" parameterType="com.dino.registermodule.domain.entity.ThirdPartAccount">
+        INSERT INTO SYS_THIRD_PARTY_ACCOUNT
+        (
+           ID
+          ,LOGIN_ID
+          ,OPEN_ID
+          ,THIRD_PARTY_ACCOUNT_TYPE
+        )
+        VALUES
+        (
+           #{id}
+          ,#{loginId}
+          ,#{openId}
+          ,#{thirdPartyAccountType}
+        )
+    </insert>
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO SYS_THIRD_PARTY_ACCOUNT
+          (
+            ID
+            ,LOGIN_ID
+            ,OPEN_ID
+            ,THIRD_PARTY_ACCOUNT_TYPE
+          )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator="," >
+          (
+             #{item.id}
+            ,#{item.loginId}
+            ,#{item.openId}
+            ,#{item.thirdPartyAccountType}
+          )
+        </foreach>
+    </insert>
+    <insert id="bindThirdPartAccount"  parameterType="com.dino.registermodule.domain.entity.ThirdPartAccount" >
+        INSERT INTO SYS_THIRD_PARTY_ACCOUNT
+        (
+        LOGIN_ID
+        ,OPEN_ID
+        ,THIRD_PARTY_ACCOUNT_TYPE
+        ,ID
+        )
+        VALUES
+        (
+        #{loginId}
+        ,#{openId}
+        ,#{thirdPartyAccountType}
+        ,#{id}
+        )
+    </insert>
+    <select id="countByOpenId" resultType="int" parameterType="java.lang.String">
+    SELECT
+      COUNT(1)
+    FROM SYS_THIRD_PARTY_ACCOUNT
+    WHERE
+      OPEN_ID=#{openId}
+    </select>
+    <select id="selectThirdPartAccountByLoginId" resultType="com.dino.registermodule.domain.entity.ThirdPartAccount">
+    SELECT
+    SYS_THIRD_PARTY_ACCOUNT.LOGIN_ID AS loginId
+    ,OPEN_ID AS openId
+    ,Third_party_account_type AS thirdPartyAccountType
+    ,ID AS id
+    FROM SYS_THIRD_PARTY_ACCOUNT
+    WHERE LOGIN_ID=#{loginId}
+    </select>
+    <update id="updateLoginId">
+    UPDATE SYS_THIRD_PARTY_ACCOUNT
+    SET LOGIN_ID=#{newLoginId}
+    WHERE LOGIN_ID=#{delLoginId}
+    </update>
+    <delete id="cancelBindThirdPartAccount" parameterType="java.lang.String">
+      DELETE FROM SYS_THIRD_PARTY_ACCOUNT WHERE OPEN_ID=#{openId}
+    </delete>
+</mapper>

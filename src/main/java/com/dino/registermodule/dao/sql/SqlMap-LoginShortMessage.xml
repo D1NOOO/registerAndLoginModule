@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dino.registermodule.dao.LoginShortMessageDao">
+    <insert id="insert" parameterType="com.dino.registermodule.domain.entity.LoginShortMessage" >
+        INSERT INTO SYS_LOGIN_SHORT_MESSAGE
+          (
+              ID
+            , LOGIN_ID
+            , LOGIN_MOBILE
+            , VERIFICATION_CODE
+            , STATUS
+            , SEND_DATE_TIME
+            , END_DATE_TIME
+            , SHORT_MESSAGE_TYPE
+          )
+        VALUES
+          (
+             #{id}
+            ,#{loginId}
+            ,#{loginMobile}
+            ,#{verificationCode}
+            ,#{status}
+            ,#{sendDateTime}
+            ,#{endDateTime}
+            ,#{shortMessageType}
+          )
+    </insert>
+</mapper>

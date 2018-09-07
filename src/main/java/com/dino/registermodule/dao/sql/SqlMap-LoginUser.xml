@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dino.registermodule.dao.LoginUserDao">
+
+    <select id="selectLoginUser" parameterType="java.util.Map"
+            resultType="com.dino.registermodule.domain.entity.LoginUser">
+        SELECT
+        SYSL.ID AS id
+        , LOGIN_NAME AS loginName
+        , LOGIN_MOBILE AS loginMobile
+        , LOGIN_MAIL AS loginMail
+        , PASSWORD AS password
+        , LOGIN_STATUS AS loginStatus
+        , LAST_LOGIN_TIME AS lastLoginTime
+        , LAST_LOGIN_IP AS lastLoginIp
+        , LAST_LOGIN_DEVICE AS lastLoginDevice
+        , REGISTER_TIME AS registerTime
+        , LOGIN_USER_TYPE AS loginUserType
+        , SLR.USER_ID AS userId
+        FROM SYS_LOGIN_USER AS SYSL
+        INNER JOIN SYS_LOGIN_REF AS SLR ON SYSL.ID = SLR.LOGIN_ID
+        <if test="openId != null">
+            INNER JOIN SYS_THIRD_PARTY_ACCOUNT AS STPA ON SYSL.ID = STPA.LOGIN_ID
+        </if>
+        WHERE 1=1
+        <if test="openId != null">
+            AND STPA.OPEN_ID = #{openId}
+        </if>
+        <if test="thirdPartAccountType != null">
+            AND STPA.THIRD_PARTY_ACCOUNT_TYPE = #{thirdPartAccountType}
+        </if>
+        <if test="loginMail != null">
+            AND SYSL.LOGIN_MAIL = #{loginMail}
+        </if>
+        <if test="loginMobile != null">
+            AND SYSL.LOGIN_MOBILE = #{loginMobile}
+        </if>
+    </select>
+
+    <select id="selectOne" parameterType="java.lang.String" resultType="com.dino.registermodule.domain.entity.LoginUser">
+       SELECT
+        SYSL.ID AS id
+        , LOGIN_NAME AS loginName
+        , LOGIN_MOBILE AS loginMobile
+        , LOGIN_MAIL AS loginMail
+        , PASSWORD AS password
+        , LOGIN_STATUS AS loginStatus
+        , LAST_LOGIN_TIME AS lastLoginTime
+        , LAST_LOGIN_IP AS lastLoginIp
+        , LAST_LOGIN_DEVICE AS lastLoginDevice
+        , REGISTER_TIME AS registerTime
+        , LOGIN_USER_TYPE AS loginUserType
+      FROM SYS_LOGIN_USER AS SYSL
+      WHERE ID=#{loginId}
+    </select>
+
+    <insert id="insert" parameterType="com.dino.registermodule.domain.entity.LoginUser">
+        INSERT INTO SYS_LOGIN_USER
+          (
+              ID
+            , LOGIN_NAME
+            , LOGIN_MOBILE
+            , LOGIN_MAIL
+            , PASSWORD
+            , LOGIN_STATUS
+            , LAST_LOGIN_TIME
+            , LAST_LOGIN_IP
+            , LAST_LOGIN_DEVICE
+            , REGISTER_TIME
+            , LOGIN_USER_TYPE
+          )
+        VALUES
+          (
+            #{id}
+           ,#{loginName}
+           ,#{loginMobile}
+           ,#{loginMail}
+           ,#{password}
+           ,#{loginStatus}
+           ,#{lastLoginTime}
+           ,#{lastLoginIp}
+           ,#{lastLoginDevice}
+           ,NOW()
+           ,#{loginUserType}
+           )
+    </insert>
+    <update id="update" parameterType="com.dino.registermodule.domain.entity.LoginUser">
+    UPDATE SYS_LOGIN_USER
+        <set>
+           <if test="null != loginName and loginName != ''">LOGIN_NAME=#{loginName},</if>
+           <if test="null != loginMobile and loginMobile != ''">LOGIN_MOBILE=#{loginMobile},</if>
+           <if test="null != loginMail and loginMail != ''">LOGIN_MAIL=#{loginMail},</if>
+           <if test="null != password and password != ''">PASSWORD=#{password},</if>
+           <if test="null != loginStatus and loginStatus != ''">LOGIN_STATUS=#{loginStatus},</if>
+           <if test="null != lastLoginTime">LAST_LOGIN_TIME=#{lastLoginTime},</if>
+           <if test="null != lastLoginIp and lastLoginIp != ''">LAST_LOGIN_IP=#{lastLoginIp},</if>
+           <if test="null != lastLoginDevice and lastLoginDevice != ''">LAST_LOGIN_DEVICE=#{lastLoginDevice},</if>
+           <if test="null != registerTime">REGISTER_TIME=#{registerTime},</if>
+           <if test="null != loginUserType and loginUserType != ''">LOGIN_USER_TYPE=#{loginUserType},</if>
+        </set>
+    WHERE ID=#{id}
+
+    </update>
+
+    <select id="countByLoginName" resultType="int" parameterType="java.util.Map">
+        SELECT
+          COUNT(1)
+        FROM SYS_LOGIN_USER
+        WHERE 1=1
+        <if test="loginMail != null">
+            AND LOGIN_MAIL = #{loginMail}
+        </if>
+        <if test="loginMobile != null">
+            AND LOGIN_MOBILE = #{loginMobile}
+        </if>
+    </select>
+    <update id="bindLoginUserMobile">
+        UPDATE SYS_LOGIN_USER
+        SET LOGIN_MOBILE=#{loginMobile}
+        WHERE ID=#{loginId}
+    </update>
+    <update id="updatePassword">
+      UPDATE SYS_LOGIN_USER
+      SET PASSWORD = #{password}
+      WHERE ID=#{loginId}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.String">
+        DELETE FROM SYS_LOGIN_USER
+        WHERE ID = #{loginId}
+    </delete>
+    <update id="bindLoginUserMail">
+      UPDATE SYS_LOGIN_USER
+      SET LOGIN_MAIL=#{loginMail}
+      WHERE ID=#{loginId}
+    </update>
+    <update id="updateLoginUserStatus">
+     UPDATE SYS_LOGIN_USER
+      SET LOGIN_STATUS=#{loginStatus}
+      WHERE ID=#{loginId}
+    </update>
+
+    <select id="selectPageList" resultType="com.dino.registermodule.domain.entity.LoginUser">
+      SELECT
+        SYSL.ID AS id
+        , LOGIN_NAME AS loginName
+        , LOGIN_MOBILE AS loginMobile
+        , LOGIN_MAIL AS loginMail
+        , PASSWORD AS password
+        , LOGIN_STATUS AS loginStatus
+        , LAST_LOGIN_TIME AS lastLoginTime
+        , LAST_LOGIN_IP AS lastLoginIp
+        , LAST_LOGIN_DEVICE AS lastLoginDevice
+        , REGISTER_TIME AS registerTime
+        , LOGIN_USER_TYPE AS loginUserType
+      FROM SYS_LOGIN_USER AS SYSL
+      where LOGIN_MOBILE LIKE concat('%',#{param.loginMobile},'%')
+      or LOGIN_MAIL LIKE concat('%',#{param.loginMail},'%')
+      LIMIT #{pageParam.rowNumber},#{pageParam.pageSize}
+
+    </select>
+
+    <select id="selectPageCount" resultType="java.lang.Integer">
+      SELECT
+        COUNT(1)
+      FROM SYS_LOGIN_USER AS SYSL
+      where LOGIN_MOBILE LIKE concat('%',#{loginMobile},'%')
+      or LOGIN_MAIL LIKE concat('%',#{loginMail},'%')
+    </select>
+    <update id="cancelBindLoginUserMail">
+      UPDATE SYS_LOGIN_USER
+      SET LOGIN_MAIL=""
+      WHERE ID=#{loginId}
+    </update>
+    <update id="cancelBindLoginUserMobile">
+    UPDATE SYS_LOGIN_USER
+      SET LOGIN_MOBILE=""
+      WHERE ID=#{loginId}
+    </update>
+
+</mapper>
