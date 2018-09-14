@@ -18,14 +18,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Api(produces = "application/json",tags = "LoginUserRestController",description="登录接口")
 public class LoginUserRestController extends BaseRestController{
-    private static final String EMAIL_LOGIN_URL = "/email/login";
+    private static final String EMAIL_LOGIN_URL = "/normal/login";
     private static final String SHORT_MESSAGE_LOGIN_URL = "/short/message/login";
     private static final String THIRD_PART_LOGIN_URL = "/third/part/login";
 
     @Autowired
     private LoginComponent loginComponent;
 
-    @ApiOperation(value="邮箱正常登录" , notes = "根据LoginComponent调用正常登录方法")
+    @ApiOperation(value="正常登录" , notes = "邮箱和手机+密码登录")
     @RequestMapping(value = EMAIL_LOGIN_URL, method = RequestMethod.POST)
     public RestResponse<LoginResult> emailLogin(@RequestBody RestRequest<NormalLoginParam> request) {
         NormalLoginParam loginParam = request.getParam();
