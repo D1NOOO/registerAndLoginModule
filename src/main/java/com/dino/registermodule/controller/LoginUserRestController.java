@@ -25,7 +25,7 @@ public class LoginUserRestController extends BaseRestController{
     @Autowired
     private LoginComponent loginComponent;
 
-    @ApiOperation(value="正常登录" , notes = "根据LoginComponent调用正常登录方法")
+    @ApiOperation(value="邮箱正常登录" , notes = "根据LoginComponent调用正常登录方法")
     @RequestMapping(value = EMAIL_LOGIN_URL, method = RequestMethod.POST)
     public RestResponse<LoginResult> emailLogin(@RequestBody RestRequest<NormalLoginParam> request) {
         NormalLoginParam loginParam = request.getParam();
@@ -33,7 +33,7 @@ public class LoginUserRestController extends BaseRestController{
         return super.createRestResponse(result);
     }
 
-    @ApiOperation(value="短信登录" , notes = "根据LoginComponent调用短信登录方法")
+    @ApiOperation(value="短信验证码登录" , notes = "根据LoginComponent调用短信登录方法")
     @RequestMapping(value = SHORT_MESSAGE_LOGIN_URL , method = RequestMethod.POST)
     public@ResponseBody
     RestResponse<LoginResult> shortMessageLogin(@RequestBody RestRequest<ShortMessageLoginParam> request) {

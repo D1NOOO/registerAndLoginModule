@@ -35,7 +35,7 @@ public class RegisterRestController extends BaseRestController{
     }
 
     @RequestMapping(value = SHORT_MESSAGE_REGISTER_URL,method = RequestMethod.POST)
-    @ApiOperation(value="短信注册" , notes = "根据RegisterComponent调用短信注册方法")
+    @ApiOperation(value="短信验证码注册" , notes = "根据RegisterComponent调用短信注册方法")
     public@ResponseBody RestResponse<LoginUserRegisterResult> shortMessageRegister(@RequestBody RestRequest<ShortMessageRegisterParam> request) {
         ShortMessageRegisterParam registerParam = request.getParam();
         LoginUserRegisterResult result = this.registerComponent.register(registerParam);
